@@ -1,142 +1,37 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#24300f">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#263410">
 <title>Коробочка — подбор рациона</title>
 <style>
-:root{--green:#263410;--green2:#3d5120;--cream:#fbf8e9;--paper:#fffef8;--muted:#747763;--line:#e8e5d7;--shadow:0 18px 50px rgba(38,52,16,.08)}
-*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--green);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.45}
-button,input,select{font:inherit}button{cursor:pointer}
-.wrap{max-width:780px;margin:auto;padding:24px 18px 56px}
-header{display:flex;align-items:center;gap:12px;padding:8px 0 28px}
-.mark{width:48px;height:48px;border-radius:16px;background:var(--green);color:var(--cream);display:grid;place-items:center;font-size:24px}
-.brand{font-weight:750;font-size:21px;letter-spacing:-.5px}.brand small{display:block;font-size:10px;letter-spacing:3px;font-weight:600;margin-top:1px}
-.hero{text-align:center;padding:30px 12px 24px}.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:2.4px;color:var(--green2);font-weight:700}
-h1{font-size:clamp(32px,7vw,48px);line-height:1.06;letter-spacing:-1.8px;margin:14px auto;max-width:600px}
-.lead{max-width:510px;margin:0 auto;color:#686b58;font-size:16px}
-.card{background:var(--paper);border:1px solid var(--line);border-radius:28px;padding:clamp(20px,5vw,34px);box-shadow:var(--shadow);margin-top:18px}
-.progress{display:flex;gap:7px;margin-bottom:25px}.progress span{height:4px;background:#e8e7dc;border-radius:20px;flex:1}.progress span.on{background:var(--green)}
-.step-label{font-size:12px;color:var(--muted);font-weight:650;letter-spacing:1px;text-transform:uppercase}
-h2{font-size:25px;letter-spacing:-.7px;margin:7px 0 8px}.hint{color:var(--muted);font-size:14px;margin:0 0 22px}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
-.field label{display:block;font-size:13px;font-weight:650;margin-bottom:7px}
-input,select{width:100%;border:1px solid #dedfce;border-radius:14px;background:#fffefb;color:var(--green);padding:14px 13px;outline:none;min-height:50px}
-input:focus,select:focus{border-color:var(--green2);box-shadow:0 0 0 3px #dfe5d1}
-.choices{display:grid;gap:10px}.choice{border:1px solid var(--line);border-radius:16px;background:#fffefb;text-align:left;padding:15px 16px;color:var(--green);display:flex;justify-content:space-between;align-items:center;gap:12px}
-.choice strong{display:block;font-size:15px}.choice small{display:block;color:var(--muted);margin-top:3px;font-size:12px}.choice .dot{width:20px;height:20px;border:1.5px solid #c9cbb8;border-radius:50%;flex-shrink:0}.choice.selected{border-color:var(--green2);background:#f5f6ed}.choice.selected .dot{border:6px solid var(--green)}
-.actions{display:flex;gap:10px;margin-top:24px}.btn{border:0;border-radius:15px;padding:15px 20px;font-weight:700;min-height:52px;transition:transform .15s,opacity .15s}.btn:active{transform:scale(.985)}.primary{background:var(--green);color:white;flex:1}.secondary{background:#efefe4;color:var(--green)}
-.error{color:#9a3d30;font-size:13px;margin-top:12px}.hidden{display:none!important}
-.result{text-align:center;padding:10px 0 0}.kcal{font-size:clamp(48px,11vw,70px);letter-spacing:-3px;font-weight:780;line-height:1.05;margin:14px 0 6px}.sub{color:var(--muted);font-size:14px}.recommend{background:#f2f3e8;border-radius:20px;padding:20px;margin:22px 0;text-align:left}.recommend .tag{font-size:11px;letter-spacing:1.6px;text-transform:uppercase;font-weight:750;color:var(--green2)}.recommend h3{font-size:23px;margin:7px 0}.recommend p{margin:0;color:#626751;font-size:14px}
-.note{font-size:12px;color:var(--muted);line-height:1.55;margin-top:18px}
-footer{text-align:center;color:var(--muted);font-size:12px;padding:24px 10px}
-@media(max-width:520px){.grid{grid-template-columns:1fr}.hero{padding-top:16px}.card{border-radius:23px}.actions{flex-direction:column-reverse}.actions .btn{width:100%}header{padding-bottom:10px}}
-</style>
-</head>
-<body>
-<div class="wrap">
-<header><div class="mark" aria-hidden="true">✿</div><div class="brand">Коробочка<small>ПРАВИЛЬНОЕ ПИТАНИЕ</small></div></header>
-<section class="hero">
-<div class="eyebrow">Рационы на каждый день</div>
-<h1>Твой рацион.<br>Твой ритм.</h1>
-<p class="lead">Ответь на несколько вопросов — рассчитаем ориентировочную потребность в энергии и покажем варианты наших рационов.</p>
-</section>
-<main class="card" id="app">
-<div class="progress" aria-hidden="true"><span class="on"></span><span></span><span></span></div>
-<div id="formStep">
-<div class="step-label">Шаг 1 из 2</div>
-<h2>Расскажи немного о себе</h2>
-<p class="hint">Расчёт предназначен для взрослых. Это ориентир, а не медицинская рекомендация.</p>
-<div class="grid">
-<div class="field"><label for="sex">Пол для формулы</label><select id="sex"><option value="female">Женский</option><option value="male">Мужской</option></select></div>
-<div class="field"><label for="age">Возраст, лет</label><input id="age" type="number" min="18" max="100" placeholder="Например, 28"></div>
-<div class="field"><label for="height">Рост, см</label><input id="height" type="number" min="120" max="230" placeholder="Например, 165"></div>
-<div class="field"><label for="weight">Вес, кг</label><input id="weight" type="number" min="30" max="300" step="0.1" placeholder="Например, 65"></div>
-<div class="field"><label for="activity">Физическая активность</label><select id="activity"><option value="1.2">Низкая — в основном сижу</option><option value="1.375">Лёгкая — тренировки 1–3 раза в неделю</option><option value="1.55">Умеренная — тренировки 3–5 раз в неделю</option><option value="1.725">Высокая — интенсивная активность</option><option value="1.9">Очень высокая — тяжёлые нагрузки</option></select></div>
-<div class="field"><label for="goal">Цель</label><select id="goal"><option value="maintain">Поддерживать вес</option><option value="lose">Снизить вес</option><option value="gain">Набрать массу</option></select></div>
-</div>
-<div id="error" class="error hidden" role="alert"></div>
-<div class="actions"><button class="btn primary" id="calculate">Рассчитать калорийность</button></div>
-<p class="note">Данные обрабатываются в этом браузере и не отправляются на сервер этой страницы.</p>
-</div>
-<div id="resultStep" class="hidden">
-<div class="step-label">Ваш результат</div>
-<div class="result"><div class="sub">Ориентировочная потребность для поддержания веса</div><div class="kcal"><span id="maintenance">—</span> <span style="font-size:22px;letter-spacing:0">ккал/день</span></div><div class="sub">Оценка по формуле, фактическая потребность может отличаться.</div></div>
-<div id="recommend" class="recommend"></div>
-<div class="step-label">Наши рационы на весь день</div>
-<div class="choices" id="plans" style="margin-top:12px"></div>
-<p class="note">Рационы 1500, 2000 и 2500 ккал — основные предложения. High Energy 3000 и 3500 ккал показаны отдельно и не назначаются автоматически. Калорийность рациона — сумма за весь день. Проверьте, что заявленные значения подтверждены расчётами ваших блюд.</p>
-<div class="actions"><button class="btn secondary" id="back">Изменить данные</button><button class="btn primary" id="order">Обсудить заказ во ВКонтакте</button></div>
-<div class="note">Расчёт не является медицинской рекомендацией. При беременности, грудном вскармливании, заболеваниях, медицинских ограничениях или возрасте младше 18 лет не используйте этот автоматический подбор; согласуйте питание со специалистом.</div>
-</div>
-</main>
-<footer>Коробочка · Правильное питание<br>Меню, состав, стоимость и условия доставки уточняйте в сообщениях сообщества.</footer>
-</div>
+:root{--green:#263410;--green2:#405322;--cream:#fbf8e9;--paper:#fffef9;--muted:#747763;--line:#e8e5d7;--shadow:0 18px 50px rgba(38,52,16,.08)}
+*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--green);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.45}button,input,select{font:inherit}button{cursor:pointer}
+.wrap{max-width:780px;margin:auto;padding:20px 18px 52px}header{display:flex;align-items:center;gap:12px;padding:8px 0 26px}
+.logo-icon{width:54px;height:54px;object-fit:cover;border-radius:17px;display:block;background:var(--green)}.brand{font-weight:760;font-size:21px;letter-spacing:-.5px}.brand small{display:block;font-size:10px;letter-spacing:3px;font-weight:650;margin-top:1px}
+.hero{text-align:center;padding:26px 12px 24px}.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:2.4px;color:var(--green2);font-weight:750}h1{font-size:clamp(34px,7vw,49px);line-height:1.06;letter-spacing:-1.8px;margin:14px auto;max-width:600px}.lead{max-width:510px;margin:0 auto;color:#686b58;font-size:16px}.brand-line{width:72px;height:2px;background:#c9cdb5;margin:23px auto 0;border-radius:3px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:28px;padding:clamp(20px,5vw,34px);box-shadow:var(--shadow);margin-top:18px}.progress{display:flex;gap:7px;margin-bottom:25px}.progress span{height:4px;background:#e8e7dc;border-radius:20px;flex:1}.progress span.on{background:var(--green)}
+.step-label{font-size:12px;color:var(--muted);font-weight:650;letter-spacing:1px;text-transform:uppercase}h2{font-size:25px;letter-spacing:-.7px;margin:7px 0 8px}.hint{color:var(--muted);font-size:14px;margin:0 0 22px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.field label{display:block;font-size:13px;font-weight:650;margin-bottom:7px}input,select{width:100%;border:1px solid #dedfce;border-radius:14px;background:#fffefb;color:var(--green);padding:14px 13px;outline:none;min-height:50px}input:focus,select:focus{border-color:var(--green2);box-shadow:0 0 0 3px #dfe5d1}
+.choices{display:grid;gap:10px}.choice{border:1px solid var(--line);border-radius:16px;background:#fffefb;text-align:left;padding:15px 16px;color:var(--green);display:flex;justify-content:space-between;align-items:center;gap:12px}.choice strong{display:block;font-size:15px}.choice small{display:block;color:var(--muted);margin-top:3px;font-size:12px}.choice .dot{width:20px;height:20px;border:1.5px solid #c9cbb8;border-radius:50%;flex-shrink:0}.choice.selected{border-color:var(--green2);background:#f5f6ed}.choice.selected .dot{border:6px solid var(--green)}
+.actions{display:flex;gap:10px;margin-top:24px}.btn{border:0;border-radius:15px;padding:15px 20px;font-weight:700;min-height:52px;transition:transform .15s,opacity .15s}.btn:active{transform:scale(.985)}.primary{background:var(--green);color:white;flex:1}.secondary{background:#efefe4;color:var(--green)}.error{color:#9a3d30;font-size:13px;margin-top:12px}.hidden{display:none!important}
+.result{text-align:center;padding:10px 0 0}.kcal{font-size:clamp(48px,11vw,70px);letter-spacing:-3px;font-weight:780;line-height:1.05;margin:14px 0 6px}.sub{color:var(--muted);font-size:14px}.recommend{background:#f2f3e8;border-radius:20px;padding:20px;margin:22px 0;text-align:left}.recommend .tag{font-size:11px;letter-spacing:1.6px;text-transform:uppercase;font-weight:750;color:var(--green2)}.recommend h3{font-size:23px;margin:7px 0}.recommend p{margin:0;color:#626751;font-size:14px}.note{font-size:12px;color:var(--muted);line-height:1.55;margin-top:18px}footer{text-align:center;color:var(--muted);font-size:12px;padding:24px 10px}
+@media(max-width:520px){.grid{grid-template-columns:1fr}.hero{padding-top:16px}.card{border-radius:23px}.actions{flex-direction:column-reverse}.actions .btn{width:100%}header{padding-bottom:10px}.logo-icon{width:48px;height:48px;border-radius:15px}}
+</style></head><body><div class="wrap">
+<header><img class="logo-icon" src="icon.png" alt="Иконка Коробочка"><div class="brand">Коробочка<small>ПРАВИЛЬНОЕ ПИТАНИЕ</small></div></header>
+<section class="hero"><div class="eyebrow">Рационы на каждый день</div><h1>Твой рацион.<br>Твой ритм.</h1><p class="lead">Ответь на несколько вопросов — рассчитаем ориентировочную потребность в энергии и покажем варианты наших рационов.</p><div class="brand-line" aria-hidden="true"></div></section>
+<main class="card" id="app"><div class="progress" aria-hidden="true"><span class="on"></span><span></span><span></span></div>
+<div id="formStep"><div class="step-label">Шаг 1 из 2</div><h2>Расскажи немного о себе</h2><p class="hint">Расчёт предназначен для взрослых. Это ориентир, а не медицинская рекомендация.</p>
+<div class="grid"><div class="field"><label for="sex">Пол для формулы</label><select id="sex"><option value="female">Женский</option><option value="male">Мужской</option></select></div><div class="field"><label for="age">Возраст, лет</label><input id="age" type="number" min="18" max="100" placeholder="Например, 28"></div><div class="field"><label for="height">Рост, см</label><input id="height" type="number" min="120" max="230" placeholder="Например, 165"></div><div class="field"><label for="weight">Вес, кг</label><input id="weight" type="number" min="30" max="300" step="0.1" placeholder="Например, 65"></div><div class="field"><label for="activity">Физическая активность</label><select id="activity"><option value="1.2">Низкая — в основном сижу</option><option value="1.375">Лёгкая — тренировки 1–3 раза в неделю</option><option value="1.55">Умеренная — тренировки 3–5 раз в неделю</option><option value="1.725">Высокая — интенсивная активность</option><option value="1.9">Очень высокая — тяжёлые нагрузки</option></select></div><div class="field"><label for="goal">Цель</label><select id="goal"><option value="maintain">Поддерживать вес</option><option value="lose">Снизить вес</option><option value="gain">Набрать массу</option></select></div></div>
+<div id="error" class="error hidden" role="alert"></div><div class="actions"><button class="btn primary" id="calculate">Рассчитать калорийность</button></div><p class="note">Данные обрабатываются в этом браузере и не отправляются на сервер этой страницы.</p></div>
+<div id="resultStep" class="hidden"><div class="step-label">Ваш результат</div><div class="result"><div class="sub">Ориентировочная потребность для поддержания веса</div><div class="kcal"><span id="maintenance">—</span> <span style="font-size:22px;letter-spacing:0">ккал/день</span></div><div class="sub">Оценка по формуле, фактическая потребность может отличаться.</div></div><div id="recommend" class="recommend"></div><div class="step-label">Наши рационы на весь день</div><div class="choices" id="plans" style="margin-top:12px"></div><p class="note">Рационы 1500, 2000 и 2500 ккал — основные предложения. High Energy 3000 и 3500 ккал показаны отдельно и не назначаются автоматически. Калорийность рациона — сумма за весь день. Убедитесь, что заявленные значения подтверждены расчётами блюд.</p><div class="actions"><button class="btn secondary" id="back">Изменить данные</button><button class="btn primary" id="order">Обсудить заказ во ВКонтакте</button></div><div class="note">Расчёт не является медицинской рекомендацией. При беременности, грудном вскармливании, заболеваниях, медицинских ограничениях или возрасте младше 18 лет не используйте автоматический подбор; согласуйте питание со специалистом.</div></div></main>
+<footer>Коробочка · Правильное питание<br>Меню, состав, стоимость и условия доставки уточняйте в сообщениях сообщества.</footer></div>
 <script>
-const VK_URL = "https://vk.ru/ppboxanapa";
-const plans = [
- {kcal:1500, name:"Рацион 1500", desc:"Основная линейка · на весь день"},
- {kcal:2000, name:"Рацион 2000", desc:"Основная линейка · на весь день"},
- {kcal:2500, name:"Рацион 2500", desc:"Основная линейка · на весь день"},
- {kcal:3000, name:"High Energy 3000", desc:"Повышенная калорийность · обсудить отдельно"},
- {kcal:3500, name:"High Energy 3500", desc:"Повышенная калорийность · обсудить отдельно"}
-];
-let chosenPlan = null;
-const $ = id => document.getElementById(id);
-function showError(message){$("error").textContent=message;$("error").classList.remove("hidden")}
-function hideError(){$("error").classList.add("hidden")}
-function pickPlan(target, goal, maintenance){
-  // Conservative matching: do not assign a plan when no standard option is close enough.
-  if(goal==="gain" && maintenance>2500) return {special:true, text:"Ваша расчётная потребность выше основных вариантов. Посмотрите линейку High Energy или обсудите выбор с нами — повышенную калорийность важно подбирать индивидуально."};
-  let targetKcal=maintenance;
-  if(goal==="lose") targetKcal=maintenance*0.9; // modest illustrative deficit; needs professional review before production use
-  if(goal==="gain") targetKcal=maintenance*1.08; // modest illustrative surplus; needs professional review before production use
-  const core=plans.slice(0,3);
-  const nearest=core.reduce((a,b)=>Math.abs(b.kcal-targetKcal)<Math.abs(a.kcal-targetKcal)?b:a);
-  if(Math.abs(nearest.kcal-targetKcal)>250) return {special:true, text:"Наши основные варианты заметно отличаются от расчётной цели. Мы не будем автоматически назначать рацион — напишите нам, и поможем разобраться с доступными предложениями."};
-  return {plan:nearest, targetKcal};
-}
-function calc(){
- hideError();
- const sex=$("sex").value, age=Number($("age").value), height=Number($("height").value), weight=Number($("weight").value), activity=Number($("activity").value), goal=$("goal").value;
- if(!Number.isFinite(age)||age<18||age>100){showError("Этот калькулятор рассчитан на взрослых от 18 лет. Для несовершеннолетних автоматический подбор не предусмотрен.");return}
- if(!Number.isFinite(height)||height<120||height>230){showError("Проверьте рост: введите значение от 120 до 230 см.");return}
- if(!Number.isFinite(weight)||weight<30||weight>300){showError("Проверьте вес: введите значение от 30 до 300 кг.");return}
- // Mifflin–St Jeor equation, followed by a rough activity multiplier.
- const bmr=10*weight+6.25*height-5*age+(sex==="male"?5:-161);
- const maintenance=Math.round((bmr*activity)/50)*50;
- $("maintenance").textContent=maintenance.toLocaleString("ru-RU");
- const recommendation=pickPlan(maintenance,goal);
- if(recommendation.special){
-   $("recommend").innerHTML='<div class="tag">Индивидуальный подбор</div><h3>Нужна дополнительная проверка</h3><p>'+recommendation.text+'</p>';
-   chosenPlan=null;
- }else{
-   chosenPlan=recommendation.plan;
-   $("recommend").innerHTML='<div class="tag">Возможный вариант</div><h3>'+chosenPlan.name+' ккал в день</h3><p>Это предварительный ориентир, а не назначение. Сопоставьте его с аппетитом, динамикой веса и индивидуальными потребностями.</p>';
- }
- $("plans").innerHTML="";
- plans.forEach(p=>{
-   const button=document.createElement("button");button.type="button";button.className="choice"+(chosenPlan&&chosenPlan.kcal===p.kcal?" selected":"");
-   button.innerHTML='<span><strong>'+p.name+' ккал</strong><small>'+p.desc+'</small></span><span class="dot" aria-hidden="true"></span>';
-   button.addEventListener("click",()=>{
-     chosenPlan=p;
-     document.querySelectorAll(".choice").forEach(x=>x.classList.remove("selected"));
-     button.classList.add("selected");
-     $("recommend").innerHTML='<div class="tag">Вы выбрали</div><h3>'+p.name+' ккал в день</h3><p>Выбор не подтверждает, что эта калорийность подходит именно вам. Перед заказом уточните состав и условия у команды «Коробочка».</p>';
-   });
-   $("plans").appendChild(button);
- });
- $("formStep").classList.add("hidden");$("resultStep").classList.remove("hidden");
- document.querySelectorAll(".progress span").forEach((x,i)=>x.classList.toggle("on",i<2));
-}
-$("calculate").addEventListener("click",calc);
-$("back").addEventListener("click",()=>{$("resultStep").classList.add("hidden");$("formStep").classList.remove("hidden");document.querySelectorAll(".progress span").forEach((x,i)=>x.classList.toggle("on",i===0));});
-$("order").addEventListener("click",()=>{
- const text=chosenPlan?`Здравствуйте! Хочу узнать подробнее о рационе ${chosenPlan.kcal} ккал на весь день.`:"Здравствуйте! Хочу обсудить подбор рациона, в том числе варианты High Energy.";
- window.open(VK_URL,"_blank","noopener");
- alert("В сообщениях сообщества напишите:\n\n"+text+"\n\nУточните меню, стоимость и доступную дату доставки.");
-});
-</script>
-</body>
-</html>
+const VK_URL="https://vk.ru/ppboxanapa";
+const plans=[{kcal:1500,name:"Рацион 1500",desc:"Основная линейка · на весь день"},{kcal:2000,name:"Рацион 2000",desc:"Основная линейка · на весь день"},{kcal:2500,name:"Рацион 2500",desc:"Основная линейка · на весь день"},{kcal:3000,name:"High Energy 3000",desc:"Повышенная калорийность · обсудить отдельно"},{kcal:3500,name:"High Energy 3500",desc:"Повышенная калорийность · обсудить отдельно"}];
+let chosenPlan=null;const $=id=>document.getElementById(id);
+function showError(m){$("error").textContent=m;$("error").classList.remove("hidden")}function hideError(){$("error").classList.add("hidden")}
+function pickPlan(goal,maintenance){if(goal==="gain"&&maintenance>2500)return{special:true,text:"Ваша расчётная потребность выше основных вариантов. Посмотрите линейку High Energy или обсудите выбор с нами — повышенную калорийность важно подбирать индивидуально."};let target=maintenance;if(goal==="lose")target=maintenance*.9;if(goal==="gain")target=maintenance*1.08;const core=plans.slice(0,3);const nearest=core.reduce((a,b)=>Math.abs(b.kcal-target)<Math.abs(a.kcal-target)?b:a);if(Math.abs(nearest.kcal-target)>250)return{special:true,text:"Наши основные варианты заметно отличаются от расчётной цели. Мы не будем автоматически назначать рацион — напишите нам, и поможем разобраться с доступными предложениями."};return{plan:nearest}}
+function calc(){hideError();const sex=$("sex").value,age=Number($("age").value),height=Number($("height").value),weight=Number($("weight").value),activity=Number($("activity").value),goal=$("goal").value;if(!Number.isFinite(age)||age<18||age>100){showError("Этот калькулятор рассчитан на взрослых от 18 лет. Для несовершеннолетних автоматический подбор не предусмотрен.");return}if(!Number.isFinite(height)||height<120||height>230){showError("Проверьте рост: введите значение от 120 до 230 см.");return}if(!Number.isFinite(weight)||weight<30||weight>300){showError("Проверьте вес: введите значение от 30 до 300 кг.");return}const bmr=10*weight+6.25*height-5*age+(sex==="male"?5:-161);const maintenance=Math.round(bmr*activity/50)*50;$("maintenance").textContent=maintenance.toLocaleString("ru-RU");const rec=pickPlan(goal,maintenance);if(rec.special){$("recommend").innerHTML='<div class="tag">Индивидуальный подбор</div><h3>Нужна дополнительная проверка</h3><p>'+rec.text+'</p>';chosenPlan=null}else{chosenPlan=rec.plan;$("recommend").innerHTML='<div class="tag">Возможный вариант</div><h3>'+chosenPlan.name+' ккал в день</h3><p>Это предварительный ориентир, а не назначение. Сопоставьте его с аппетитом, динамикой веса и индивидуальными потребностями.</p>'}$("plans").innerHTML="";plans.forEach(p=>{const b=document.createElement("button");b.type="button";b.className="choice"+(chosenPlan&&chosenPlan.kcal===p.kcal?" selected":"");b.innerHTML='<span><strong>'+p.name+' ккал</strong><small>'+p.desc+'</small></span><span class="dot" aria-hidden="true"></span>';b.addEventListener("click",()=>{chosenPlan=p;document.querySelectorAll(".choice").forEach(x=>x.classList.remove("selected"));b.classList.add("selected");$("recommend").innerHTML='<div class="tag">Вы выбрали</div><h3>'+p.name+' ккал в день</h3><p>Перед заказом уточните состав и условия у команды «Коробочка». Выбор не подтверждает, что эта калорийность подходит именно вам.</p>'});$("plans").appendChild(b)});$("formStep").classList.add("hidden");$("resultStep").classList.remove("hidden");document.querySelectorAll(".progress span").forEach((x,i)=>x.classList.toggle("on",i<2))}
+$("calculate").addEventListener("click",calc);$("back").addEventListener("click",()=>{$("resultStep").classList.add("hidden");$("formStep").classList.remove("hidden");document.querySelectorAll(".progress span").forEach((x,i)=>x.classList.toggle("on",i===0))});
+$("order").addEventListener("click",()=>{const msg=chosenPlan?`Здравствуйте! Хочу узнать подробнее о рационе ${chosenPlan.kcal} ккал на весь день.`:"Здравствуйте! Хочу обсудить подбор рациона, в том числе варианты High Energy.";window.open(VK_URL,"_blank","noopener");alert("В сообщениях сообщества напишите:\n\n"+msg+"\n\nУточните меню, стоимость и доступную дату доставки.")});
+</script></body></html>
